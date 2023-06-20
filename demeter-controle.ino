@@ -7,13 +7,13 @@
 int fluxo;
 String resposta_req;
 String resposta_get;
-double calculoVazao;
+double calculoVazao; // 
 double fluxoAtual;
 float fluxoAcumulado = 0;
 double litro;
 
-const char* ssid = "LAPTOP-E1P3A6VQ 5714";
-const char* password = "labnote123";
+const char* ssid = "[Nome da Rede]";
+const char* password = "[Senha da Rede]";
 
 double totalLitro(int fluxo) {
   calculoVazao = (fluxo * 2.25);
@@ -49,12 +49,12 @@ void loop() {
     WiFiClient client;
     HTTPClient http;    //Declare object of class HTTPClient
 
-    resposta_req = httpGETRequest("http://smart-water-api.herokuapp.com/last-req");
+    resposta_req = httpGETRequest("[ENDPOINT]");
     JSONVar objeto = JSON.parse(resposta_req);
     
     int last_req = objeto["last_req"];
 
-    resposta_get = httpGETRequest("http://smart-water-api.herokuapp.com/req");
+    resposta_get = httpGETRequest("[ENDPOINT]");
     JSONVar obj = JSON.parse(resposta_get);
 
     int nova_req = obj["id_req"];
@@ -62,7 +62,7 @@ void loop() {
 
     Serial.print("AGUARDANDO NOVA REQUISIÇÃO.");
     while (nova_req <= last_req) {
-      resposta_get = httpGETRequest("http://smart-water-api.herokuapp.com/req");
+      resposta_get = httpGETRequest("[ENDPOINT]");
       JSONVar obj = JSON.parse(resposta_get);
 
       nova_req = obj["id_valor"];
@@ -95,14 +95,14 @@ void loop() {
     serializeJson(doc, requestBody1);
     Serial.println(requestBody1);
 
-    httpPOSTRequestJSON("http://smart-water-api.herokuapp.com/last-req", requestBody1);
+    httpPOSTRequestJSON("[ENDPOINT]", requestBody1);
 
     doc["total"] = valor_recebido;
   
     String requestBody2;
     serializeJson(doc, requestBody2);
 
-    httpPOSTRequestJSON("http://smart-water-api.herokuapp.com/total", requestBody2);
+    httpPOSTRequestJSON("[ENDPOINT]", requestBody2);
  
   } else {
     Serial.println("Desconectado");
